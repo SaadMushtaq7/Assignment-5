@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import TripDetailsTable from "../utils/TripDetailsTable";
 import WeatherCard from "../utils/WeatherCard";
 import Button from "@mui/material/Button";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import "../styles/trip-details.css";
-import { useLocation } from "react-router-dom";
 
 export default function TripDetails() {
   const location = useLocation();
