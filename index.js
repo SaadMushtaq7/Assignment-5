@@ -3,15 +3,14 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const TourModel = require("./models/Tour");
 const BookedTourModel = require("./models/BookedTour");
+const { MONGOURI } = require("../config/keys");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(
-  "mongodb+srv://saadm:qvrYHdKJTsNlI3DH@cluster0.bjhva.mongodb.net/tour-bay?retryWrites=true&w=majority"
-);
+mongoose.connect(MONGOURI);
 
 app.get("/getTours", (req, res) => {
   TourModel.find({}).exec((err, result) => {
@@ -80,6 +79,11 @@ app.delete("/deleteTour/:id", (req, res) => {
     }
   });
 });
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(__dirname, "client", "build"));
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+}
 
 app.listen(3001, () => {
   console.log("Server running on port 3001");
