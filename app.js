@@ -10,7 +10,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(MONGOURI);
+mongoose.connect(MONGOURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 app.get("/getTours", (req, res) => {
   TourModel.find({}).exec((err, result) => {
