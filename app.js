@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const TourModel = require("./models/Tour");
 const BookedTourModel = require("./models/BookedTour");
-const { MONGOURI } = require("../config/keys");
+const { MONGOURI } = require("./config/keys");
 
 const app = express();
 
