@@ -20,7 +20,7 @@ export const bookTour = async (
       tourId,
     })
     .then((res) => {
-      console.log("Tour Booked ", res);
+      console.log("Tour Booked ");
     })
     .catch((err) => {
       console.log(`Error Booking Tour: ${err}`);
@@ -72,7 +72,7 @@ export const deleteMyTour = async (bookedTourId) => {
   await axios
     .delete(`http://localhost:3001/deleteTour/${bookedTourId}`)
     .then((res) => {
-      console.log("Tour Deleted ", res);
+      console.log("Tour Deleted ");
     })
     .catch((err) => {
       console.log(`Error Deleting Tour: ${err}`);

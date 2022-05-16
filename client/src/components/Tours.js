@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { Grid } from "@mui/material";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -12,7 +13,6 @@ import { fetchWeather } from "../services/Weather";
 import { fetchTours } from "../services/Tours";
 import { setTours, setWeather } from "../redux/actions/filesActions";
 import "../styles/tours.css";
-import { useLocation } from "react-router-dom";
 
 export default function Tours() {
   const dispatch = useDispatch();
@@ -77,11 +77,7 @@ export default function Tours() {
                     <MenuItem className="filter-option" value="price">
                       Price
                     </MenuItem>
-                    <MenuItem
-                      className="filter-option"
-                      value="Date"
-                      //value={`${tourDate[0]} - ${tourDate[1]}`}
-                    >
+                    <MenuItem className="filter-option" value="Date">
                       Date
                     </MenuItem>
                   </Select>
@@ -115,8 +111,6 @@ export default function Tours() {
                     } else if (searched === "price") {
                       const [startPrice, endPrice] =
                         stateReceived.price.split("-");
-
-                      console.log(parseInt(tour.price) <= parseInt(endPrice));
 
                       if (
                         parseInt(tour.price) >= parseInt(startPrice) &&

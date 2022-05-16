@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { Grid } from "@mui/material";
 import TripCard from "../utils/TripCard";
+import Spinner from "../utils/Spinner";
 import { getMyTours } from "../services/BookTours";
 import { userSetTours } from "../redux/actions/filesActions";
 import "../styles/tours.css";
-import Spinner from "../utils/Spinner";
 
 export default function MyTours() {
   const [tourDeleted, setTourDeleted] = useState(false);

@@ -19,10 +19,6 @@ export default function DialogBox({
 
   const dispatch = useDispatch();
 
-  const tours = useSelector((state) =>
-    state.allmytours.mytours ? state.allmytours.mytours : []
-  );
-  console.log(tours);
   const handleClose = async () => {
     await deleteMyTour(bookedTour._id);
     dispatch(userDeleteTour(bookedTour));

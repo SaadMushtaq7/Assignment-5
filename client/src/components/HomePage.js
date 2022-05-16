@@ -1,6 +1,5 @@
 import React from "react";
 import SearchBar from "./SearchBar";
-
 import "../styles/home-page.css";
 
 export default function HomePage() {

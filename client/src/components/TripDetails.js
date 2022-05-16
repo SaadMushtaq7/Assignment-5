@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 export default function TripDetails() {
   const location = useLocation();
   const { tour, weather } = location.state;
-  console.log(tour.facilities);
+
   return (
     <div className="trip-detail-container">
       <div className="trip-title">

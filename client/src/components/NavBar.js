@@ -31,9 +31,6 @@ export default function NavBar() {
               >
                 Tours
               </Link>
-              {/*<Link className="nav-link" to="/">
-                Add Tour
-              </Link>*/}
               <Link className="nav-link" to="/myTours">
                 My Tours
               </Link>
