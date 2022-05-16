@@ -35,13 +35,6 @@ export default function MyTours() {
       <div className="tours-container">
         {myTours ? (
           <>
-            <div className="upper-display">
-              <h2>Top Destinations at "Miami"</h2>
-              <button>
-                <FilterListIcon />
-                Filters
-              </button>
-            </div>
             <div className="results">
               <Grid
                 container
