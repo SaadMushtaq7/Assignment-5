@@ -1,0 +1,30 @@
+.weather-card-container{
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+    
+}
+.weather-card-container .weather-card{
+    margin-left: 90px;
+    width: 340px;
+    transition: 0.5s all;
+    
+}
+.weather-card-container .weather-card:hover{
+    background-color: #F16B51;
+    color: white;
+    cursor: pointer;
+}
+.weather-card-container .header{
+    display: flex;
+    flex-direction: row;
+}
+.weather-card-container .header img{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+}
+.weather-card-container li {
+    margin-left: 30px;
+}

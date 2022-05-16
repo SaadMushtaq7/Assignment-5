@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.navbar-container .container-fluid .navbar-brand{
+    font-family: 'Lobster', cursive;
+    font-size: 25px;
+}
+.navbar-container .container-fluid .navbar-brand .first-brand{
+    color: #F16B51;
+}
+.navbar-container .navbar-collapse .navbar-nav{
+    margin-left: 300px;
+}
+.navbar-container .navbar-collapse .navbar-nav a{
+    font-family: 'Roboto', sans-serif;
+    width: 100px;
+    height: 50px;
+    font-size: 17px;
+    font-weight: bold;
+    margin-left: 120px;
+    color: #393A56;
+    transition: all 0.3s;
+    text-align: center;
+}
+.navbar-container .navbar-collapse .navbar-nav a:hover{
+    font-size: 19px;
+    border-bottom: 4px solid #F16B51;
+}

@@ -1,0 +1,68 @@
+.trip-card-container{
+    width: fit-content;
+}
+.trip-card-container .place-name {
+    width: 350px;
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 300px;
+    text-overflow: ellipsis;
+}
+.trip-card-container .tour-description{
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #CCCCCC;
+    height: 120px;
+    width: 300px;
+    margin-left:10px;
+    margin-right: 10px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trip-card-container .price-time {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trip-card-container .user-options{
+    display: flex;
+    flex-direction: row;
+}
+.trip-card-container .user-options .delete-btn{
+    color: #F16B51;
+    width: 45px;
+    height: 45px;
+}
+
+.trip-card-container button.my-tours-option{
+    width: 140px;
+    height: 40px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #F16B51;
+    align-items: center;
+    transition: 0.5s all;
+    margin: 5px;
+}
+.trip-card-container button.tours-option{
+    width: 340px;
+    height: 40px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #F16B51;
+    align-items: center;
+    transition: 0.5s all;
+    margin: 5px;
+}
+.trip-card-container button:hover{
+    background-color: #CCCCCC;
+    color: #F16B51;
+}

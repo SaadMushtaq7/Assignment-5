@@ -1,0 +1,59 @@
+.tour-form-container{
+    display: flex;
+    flex-direction: row;
+    margin-top:5px;
+    margin-right:20px;
+    margin-left: 20px;
+}
+.tour-form-container .split {
+    width: 50vw;
+  }
+  .tour-form-container .form{
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+  }
+  .tour-form-container .form div{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+  }
+  .tour-form-container .form div.phone-number .phone-input{
+      display: flex;
+      flex-direction: row;
+      width: 53%;    
+      --PhoneInputCountryFlag-height: 25px;
+      
+  }
+  .tour-form-container .form div.members{
+      display: flex;
+      flex-direction: row;
+      
+  }
+  .tour-form-container .form div.members #outlined-basic-adults{
+      margin-left: 40px;
+  }
+  .tour-form-container .form div.payment-method #demo-simple-select-label{
+      margin-top: 15px;
+      margin-left: 2px;
+  }
+  .tour-form-container .form div.payment-method .payment-select{
+    width: 390px;
+  }
+  .tour-form-container .form div.btn .confirm-btn{
+      width: 200px;
+      height: 50px;
+      margin-top: 20px;
+  }
+  .tour-form-container .main-img{
+      right: 0;
+  }
+  .tour-form-container .main-img img{
+      height:630px;
+      width: 100%;
+      display: block;
+      border-radius: 5px;
+  }

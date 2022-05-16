@@ -1,0 +1,28 @@
+.tours-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+}
+.tours-container .upper-display{
+    display: flex;
+    flex-direction: row;
+    margin: 0px 50px;
+}
+.tours-container .upper-display .filter-search{
+    display: flex;
+    flex-direction: row;
+    margin-left: 50%;
+}
+
+.tours-container .upper-display .filter-search .filter-icon{
+    width: 30px;
+    margin-top: 20px;
+    margin-right: 10px;
+    color: #F16B51;
+}
+
+.tours-container .results{
+    margin: 10px 50px;
+    display: flex;
+    flex-direction: row;
+}

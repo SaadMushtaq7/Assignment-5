@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.searchbar-container{
+    font-family: 'Roboto', sans-serif;
+}
+.searchbar-container .container .search-filter{
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.searchbar-container .container .row .style-margin{
+    border-right: 2px solid black;
+}
+.searchbar-container .container .row p{
+    cursor: pointer;
+    color: #CCCCCC;
+}
+.searchbar-container .container .row p.main-option{
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 20px;
+    color: black;
+}
+.searchbar-container .container .row .search{
+    height: 110px;
+    width: 70px;
+}
+.searchbar-container .container .row .search-btn{
+    background-color: #F16B51;
+    color: white;
+    width: 60px;
+    height: 100px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    font-size: 25px;
+    transition: all 0.3s;
+    align-items: center;
+}
+.searchbar-container .container .row .search-btn:hover{
+    width: 63px;
+    height: 102px;
+}
+.searchbar-container .container .popular{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+}
+.searchbar-container .container .popular .title h2{
+    font-weight: bolder;
+}
+.searchbar-container .container .popular div{
+    display: flex;
+    flex-direction: row;
+}
+.searchbar-container .container .popular div p{
+    border: 1px solid #CCCCCC;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 10px;
+}

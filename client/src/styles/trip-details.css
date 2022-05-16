@@ -1,0 +1,42 @@
+.trip-detail-container{
+    margin: 30px;
+}
+.trip-detail-container .trip-images{
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    height: 330px;
+}
+.trip-detail-container .trip-images div{
+    max-width: 470px;
+    max-height: 320px;
+}
+.trip-detail-container img{
+    width: 450px;
+    height: 300px;
+    transition: 0.5s all;
+}
+.trip-detail-container img:hover{
+    width: 470px;
+    height: 320px;
+}
+.trip-detail-container .trip-images .secondary-img{
+    margin-left: 20px;
+}
+
+.trip-detail-container .trip-options{
+    display: flex;
+    flex-direction: row;
+}
+.trip-detail-container .trip-options .move-left{
+    margin-left: 30px;
+}
+.trip-detail-container .weather-details{
+    margin-top: 20px;
+}
+.trip-detail-container .add-tour-btn{
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
