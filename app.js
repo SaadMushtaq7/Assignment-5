@@ -81,8 +81,11 @@ app.delete("/deleteTour/:id", (req, res) => {
 });
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(__dirname, "client", "build"));
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  const path = require("path");
+  app.get("/", (req, res) => {
+    app.use(express.static(path.resolve(__dirname, "client", "build")));
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
 }
 
 app.listen(3001, () => {
