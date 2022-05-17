@@ -3,17 +3,15 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const TourModel = require("./models/Tour");
 const BookedTourModel = require("./models/BookedTour");
-const { MONGOURI } = require("./config/keys");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(MONGOURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://saadm:qvrYHdKJTsNlI3DH@cluster0.bjhva.mongodb.net/tour-bay?retryWrites=true&w=majority"
+);
 
 app.get("/getTours", (req, res) => {
   TourModel.find({}).exec((err, result) => {

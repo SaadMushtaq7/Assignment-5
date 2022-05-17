@@ -94,7 +94,7 @@ export default function TourForm({ tourId, tourDetails }) {
             className="phone-input"
             placeholder="Phone Number"
             value={phoneNumber}
-            onChange={setPhoneNumber}
+            onChange={(phone) => setPhoneNumber(phone)}
           />
         </div>
         <div className="members">

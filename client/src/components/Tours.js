@@ -8,7 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Box from "@mui/material/Box";
-import TripCard from "../utils/TripCard";
+import TripCard from "../sharedComponents/TripCard";
 import { fetchWeather } from "../services/Weather";
 import { fetchTours } from "../services/Tours";
 import { setTours, setWeather } from "../redux/actions/filesActions";
@@ -18,7 +18,8 @@ export default function Tours() {
   const dispatch = useDispatch();
   const location = useLocation();
   const stateReceived = location.state;
-  const [searched, setSearched] = useState(null);
+  const [filter, setFilter] = useState(null);
+
   const fetchWeatherResult = useCallback(async () => {
     const res = await fetchWeather(
       stateReceived ? stateReceived.city : "Miami"
@@ -36,25 +37,39 @@ export default function Tours() {
     state.alltours.tours ? state.alltours.tours : []
   );
   const weather = useSelector((state) =>
-    state.allweatherupdates.weather.list
+    state.allweatherupdates.weather
       ? state.allweatherupdates.weather.list.slice(0, 3)
       : []
   );
   useEffect(() => {
     fetchToursResult();
     if (stateReceived) {
-      setSearched("city");
+      if (
+        stateReceived.city &&
+        stateReceived.priceRange === "" &&
+        stateReceived.tourDate === ""
+      ) {
+        setFilter("city");
+      } else if (
+        stateReceived.city === "" &&
+        stateReceived.priceRange &&
+        stateReceived.tourDate === [null, null]
+      ) {
+        setFilter("price");
+      } else {
+        setFilter("city");
+      }
     }
   }, [fetchToursResult, stateReceived]);
 
   return (
     <div className="tours-container">
       <div className="upper-display">
-        {searched ? (
+        {filter && (
           <>
             <h2>
               Top Destinations at "
-              {searched === "city" ? stateReceived.city : stateReceived.price}"
+              {filter === "city" ? stateReceived.city : stateReceived.price}"
             </h2>
             <div className="filter-search">
               <FilterListIcon className="filter-icon" />
@@ -65,10 +80,10 @@ export default function Tours() {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     className="filter-select"
-                    value={searched}
+                    value={filter}
                     label="Filter"
                     onChange={(e) => {
-                      setSearched(e.target.value);
+                      setFilter(e.target.value);
                     }}
                   >
                     <MenuItem className="filter-option" value="city">
@@ -85,8 +100,6 @@ export default function Tours() {
               </Box>
             </div>
           </>
-        ) : (
-          ""
         )}
       </div>
       <div className="results">
@@ -95,44 +108,39 @@ export default function Tours() {
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
-          {tours.length
-            ? tours
-                .filter((tour) => {
-                  if (!searched) {
-                    return tour;
-                  } else {
-                    if (searched === "city") {
-                      if (
-                        tour.city.toLowerCase() ===
-                        stateReceived.city.toLowerCase()
-                      ) {
-                        return tour;
-                      }
-                    } else if (searched === "price") {
-                      const [startPrice, endPrice] =
-                        stateReceived.price.split("-");
-
-                      if (
-                        parseInt(tour.price) >= parseInt(startPrice) &&
-                        parseInt(tour.price) <= parseInt(endPrice)
-                      ) {
-                        return tour;
-                      }
+          {tours.length &&
+            tours
+              .filter((tour) => {
+                if (!filter) {
+                  return tour;
+                } else {
+                  if (filter === "city") {
+                    if (
+                      tour.city.toLowerCase() ===
+                      stateReceived.city.toLowerCase()
+                    ) {
+                      return tour;
                     }
+                  } else if (filter === "price") {
+                    const [startPrice, endPrice] =
+                      stateReceived.price.split("-");
 
-                    return null;
+                    if (
+                      parseInt(tour.price) >= parseInt(startPrice) &&
+                      parseInt(tour.price) <= parseInt(endPrice)
+                    ) {
+                      return tour;
+                    }
                   }
-                })
-                .map((tour) => (
-                  <Grid item xs={2} sm={4} md={4} key={tour._id}>
-                    <TripCard
-                      bookedTour={false}
-                      tour={tour}
-                      weather={weather}
-                    />
-                  </Grid>
-                ))
-            : ""}
+
+                  return null;
+                }
+              })
+              .map((tour) => (
+                <Grid item xs={2} sm={4} md={4} key={tour._id}>
+                  <TripCard bookedTour={false} tour={tour} weather={weather} />
+                </Grid>
+              ))}
         </Grid>
       </div>
     </div>

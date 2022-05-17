@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid } from "@mui/material";
-import TripCard from "../utils/TripCard";
-import Spinner from "../utils/Spinner";
+import TripCard from "../sharedComponents/TripCard";
+import Spinner from "../sharedComponents/Spinner";
 import { getMyTours } from "../services/BookTours";
 import { userSetTours } from "../redux/actions/filesActions";
 import "../styles/tours.css";
@@ -40,21 +40,20 @@ export default function MyTours() {
                 spacing={{ xs: 2, md: 3 }}
                 columns={{ xs: 4, sm: 8, md: 12 }}
               >
-                {myTours.length
-                  ? myTours.map((mytour) => {
-                      return (
-                        <Grid item xs={2} sm={4} md={4} key={mytour._id}>
-                          <TripCard
-                            bookedTour={true}
-                            tour={mytour.tours}
-                            tourDetails={mytour}
-                            weather={weather}
-                            setTourDeleted={setTourDeleted}
-                          />
-                        </Grid>
-                      );
-                    })
-                  : ""}
+                {myTours.length &&
+                  myTours.map((mytour) => {
+                    return (
+                      <Grid item xs={2} sm={4} md={4} key={mytour._id}>
+                        <TripCard
+                          bookedTour={true}
+                          tour={mytour.tours}
+                          tourDetails={mytour}
+                          weather={weather}
+                          setTourDeleted={setTourDeleted}
+                        />
+                      </Grid>
+                    );
+                  })}
               </Grid>
             </div>
           </>
