@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
@@ -6,7 +6,6 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
-import PhoneInput from "react-phone-number-input";
 import { bookTour, updateMyTour } from "../services/BookTours";
 import "react-phone-number-input/style.css";
 import "../styles/tour-form.css";
@@ -16,10 +15,55 @@ export default function TourForm({ tourId, tourDetails }) {
   const [email, setEmail] = useState("");
   const [numOfAdults, setNumOfAdults] = useState("");
   const [numOfChilds, setNumOfChilds] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [errors, setErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
 
-  const handleSubmit = async () => {
+  const validate = useCallback(
+    (userName, userEmail, adults, childs, userPhone, payMethod) => {
+      const tempErrors = {};
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+      const numberRegex = /^\d+$/;
+      if (!userName) {
+        tempErrors.name = "This field is required!";
+      }
+      if (!emailRegex.test(userEmail)) {
+        tempErrors.email = "Enter a valid Email address!";
+      }
+      if (!numberRegex.test(adults)) {
+        tempErrors.numOfAdults = "Enter a valid Number!";
+      }
+      if (!numberRegex.test(childs)) {
+        tempErrors.numOfChilds = "Enter a valid Number!";
+      }
+      if (!(numberRegex.test(userPhone) && userPhone.length === 11)) {
+        tempErrors.phoneNumber = "Enter a valid Phone Number!";
+      }
+      if (!payMethod) {
+        tempErrors.paymentMethod = "Select on option!";
+      }
+
+      return tempErrors;
+    },
+    []
+  );
+
+  const handleError = () => {
+    setErrors(
+      validate(
+        name,
+        email,
+        numOfAdults,
+        numOfChilds,
+        phoneNumber,
+        paymentMethod
+      )
+    );
+    setIsSubmit(true);
+  };
+
+  const handleSubmit = useCallback(async () => {
     if (tourDetails) {
       await updateMyTour(
         name,
@@ -42,9 +86,21 @@ export default function TourForm({ tourId, tourDetails }) {
         tourId
       );
     }
-  };
+  }, [
+    name,
+    email,
+    numOfAdults,
+    numOfChilds,
+    phoneNumber,
+    paymentMethod,
+    tourId,
+    tourDetails,
+  ]);
 
   useEffect(() => {
+    if (Object.keys(errors).length === 0 && isSubmit) {
+      handleSubmit();
+    }
     if (tourDetails) {
       setName(tourDetails.name);
       setEmail(tourDetails.email);
@@ -53,7 +109,8 @@ export default function TourForm({ tourId, tourDetails }) {
       setPhoneNumber(tourDetails.phoneNo);
       setPaymentMethod(tourDetails.paymentMethod);
     }
-  }, [tourDetails]);
+  }, [tourDetails, errors, isSubmit, handleSubmit]);
+
   return (
     <div className="tour-form-container">
       <div className="split form">
@@ -71,7 +128,9 @@ export default function TourForm({ tourId, tourDetails }) {
               style: { width: 400, marginTop: 10 },
             }}
             variant="outlined"
+            autoComplete="off"
           />
+          <p className="error-msg">{errors.name}</p>
         </div>
         <div>
           <TextField
@@ -87,49 +146,66 @@ export default function TourForm({ tourId, tourDetails }) {
               style: { width: 400, marginTop: 10 },
             }}
             variant="outlined"
+            autoComplete="off"
           />
+          <p className="error-msg">{errors.email}</p>
         </div>
         <div className="phone-number">
-          <PhoneInput
-            className="phone-input"
-            placeholder="Phone Number"
+          <TextField
+            className="input-text"
+            id="outlined-basic-phone"
+            label="Phone No."
             value={phoneNumber}
-            onChange={(phone) => setPhoneNumber(phone)}
+            onChange={(e) => {
+              setPhoneNumber(e.target.value);
+            }}
+            InputProps={{ style: { width: 400, paddingLeft: 20 } }}
+            InputLabelProps={{
+              style: { width: 400, marginTop: 10 },
+            }}
+            variant="outlined"
           />
+          <p className="error-msg">{errors.phoneNumber}</p>
         </div>
         <div className="members">
-          <TextField
-            className="input-text"
-            id="outlined-basic-adults"
-            label="Number of Adults"
-            value={numOfAdults}
-            onChange={(e) => {
-              setNumOfAdults(e.target.value);
-            }}
-            InputProps={{
-              style: { width: 200, marginLeft: 0 },
-            }}
-            InputLabelProps={{
-              style: { width: 200, marginTop: 10 },
-            }}
-            variant="outlined"
-          />
-          <TextField
-            className="input-text"
-            id="outlined-basic-childs"
-            label="Number of Childrens"
-            value={numOfChilds}
-            onChange={(e) => {
-              setNumOfChilds(e.target.value);
-            }}
-            InputProps={{
-              style: { width: 180, paddingLeft: 20, marginLeft: 10 },
-            }}
-            InputLabelProps={{
-              style: { width: 180, marginTop: 10, marginLeft: 10 },
-            }}
-            variant="outlined"
-          />
+          <div className="adults-childs">
+            <TextField
+              className="input-text"
+              id="outlined-basic-adults"
+              label="Number of Adults"
+              value={numOfAdults}
+              onChange={(e) => {
+                setNumOfAdults(e.target.value);
+              }}
+              InputProps={{
+                style: { width: 200, marginLeft: 0 },
+              }}
+              InputLabelProps={{
+                style: { width: 200, marginTop: 10 },
+              }}
+              variant="outlined"
+            />
+            <p className="error-msg">{errors.numOfAdults}</p>
+          </div>
+          <div className="adults-childs">
+            <TextField
+              className="input-text"
+              id="outlined-basic-childs"
+              label="Number of Childrens"
+              value={numOfChilds}
+              onChange={(e) => {
+                setNumOfChilds(e.target.value);
+              }}
+              InputProps={{
+                style: { width: 180, paddingLeft: 20, marginLeft: 10 },
+              }}
+              InputLabelProps={{
+                style: { width: 180, marginTop: 10, marginLeft: 10 },
+              }}
+              variant="outlined"
+            />
+            <p className="error-msg">{errors.numOfChilds}</p>
+          </div>
         </div>
         <div className="payment-method">
           <Box sx={{ minWidth: 400 }}>
@@ -155,10 +231,11 @@ export default function TourForm({ tourId, tourDetails }) {
               </Select>
             </FormControl>
           </Box>
+          <p className="error-msg">{errors.paymentMethod}</p>
         </div>
         <div className="btn">
           <Button
-            onClick={handleSubmit}
+            onClick={handleError}
             variant="contained"
             color="error"
             className="confirm-btn"

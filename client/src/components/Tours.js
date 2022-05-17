@@ -22,7 +22,7 @@ export default function Tours() {
 
   const fetchWeatherResult = useCallback(async () => {
     const res = await fetchWeather(
-      stateReceived ? stateReceived.city : "Miami"
+      stateReceived.city ? stateReceived.city : "Miami"
     );
     dispatch(setWeather(res));
   }, [dispatch, stateReceived]);
@@ -37,7 +37,7 @@ export default function Tours() {
     state.alltours.tours ? state.alltours.tours : []
   );
   const weather = useSelector((state) =>
-    state.allweatherupdates.weather
+    state.allweatherupdates.weather.list
       ? state.allweatherupdates.weather.list.slice(0, 3)
       : []
   );
@@ -68,8 +68,11 @@ export default function Tours() {
         {filter && (
           <>
             <h2>
-              Top Destinations at "
-              {filter === "city" ? stateReceived.city : stateReceived.price}"
+              {stateReceived.city &&
+                stateReceived.price &&
+                stateReceived.tourDate &&
+                `Top Destinations at "
+              ${filter === "city" ? stateReceived.city : stateReceived.price}"`}
             </h2>
             <div className="filter-search">
               <FilterListIcon className="filter-icon" />
@@ -92,7 +95,7 @@ export default function Tours() {
                     <MenuItem className="filter-option" value="price">
                       Price
                     </MenuItem>
-                    <MenuItem className="filter-option" value="Date">
+                    <MenuItem className="filter-option" value="date">
                       Date
                     </MenuItem>
                   </Select>
@@ -120,6 +123,8 @@ export default function Tours() {
                       stateReceived.city.toLowerCase()
                     ) {
                       return tour;
+                    } else if (stateReceived.city.length === 0) {
+                      return tour;
                     }
                   } else if (filter === "price") {
                     const [startPrice, endPrice] =
@@ -130,7 +135,11 @@ export default function Tours() {
                       parseInt(tour.price) <= parseInt(endPrice)
                     ) {
                       return tour;
+                    } else if (stateReceived.price.length === 0) {
+                      return tour;
                     }
+                  } else if (filter === "date") {
+                    return tour;
                   }
 
                   return null;

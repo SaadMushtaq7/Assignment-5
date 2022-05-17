@@ -21,6 +21,10 @@
       align-items: center;
       margin-top: 10px;
   }
+  .tour-form-container .form div p.error-msg{
+      color: crimson;
+      height: 10px;
+  }
   .tour-form-container .form div.phone-number .phone-input{
       display: flex;
       flex-direction: row;
@@ -33,6 +37,11 @@
       flex-direction: row;
       
   }
+  .tour-form-container .form div.members .adults-childs{
+    display: flex;
+    flex-direction: column;
+    
+}
   .tour-form-container .form div.members #outlined-basic-adults{
       margin-left: 40px;
   }
