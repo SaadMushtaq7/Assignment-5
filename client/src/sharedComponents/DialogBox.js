@@ -14,54 +14,87 @@ export default function DialogBox({
   setDeleteCheck,
   bookedTour,
   setTourDeleted,
+  tourDateCheck,
+  tourName,
 }) {
   const [open, setOpen] = useState(deleteCheck);
 
   const dispatch = useDispatch();
 
   const handleClose = async () => {
-    await deleteMyTour(bookedTour._id);
-    dispatch(userDeleteTour(bookedTour));
-    setTourDeleted(true);
-    setOpen(false);
+    if (!tourDateCheck) {
+      await deleteMyTour(bookedTour._id);
+      dispatch(userDeleteTour(bookedTour));
+      setTourDeleted(true);
+    } else {
+      setOpen(false);
+    }
+
     setDeleteCheck(false);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
   };
 
   return (
     <div className="dialog-box-container">
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        maxWidth="md"
-      >
-        <DialogTitle
-          color="error"
-          sx={{ fontSize: 20, fontWeight: "Bold" }}
-          id="alert-dialog-title"
+      {tourDateCheck ? (
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth="md"
         >
-          {"Delete Tour"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure to delete 'Perez Art Meuseum Miami'?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="outlined" color="error" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
+          <DialogTitle
             color="error"
-            onClick={handleClose}
-            autoFocus
+            sx={{ fontSize: 20, fontWeight: "Bold" }}
+            id="alert-dialog-title"
           >
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
+            {"Delete Tour"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Unable to delete! 3 or less days remaining.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="error" onClick={handleClose}>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+      ) : (
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth="md"
+        >
+          <DialogTitle
+            color="error"
+            sx={{ fontSize: 20, fontWeight: "Bold" }}
+            id="alert-dialog-title"
+          >
+            {"Delete Tour"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {`Are you sure to delete '${tourName}'?`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="outlined" color="error" onClick={handleCancel}>
+              Cancel
+            </Button>
+            <Button variant="contained" color="error" onClick={handleClose}>
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </div>
   );
 }

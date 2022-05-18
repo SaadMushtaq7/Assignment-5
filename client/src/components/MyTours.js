@@ -19,6 +19,7 @@ export default function MyTours() {
   const myTours = useSelector((state) =>
     state.allmytours.mytours ? state.allmytours.mytours : []
   );
+
   const weather = useSelector((state) =>
     state.allweatherupdates.weather.list
       ? state.allweatherupdates.weather.list.slice(0, 3)
@@ -40,7 +41,7 @@ export default function MyTours() {
                 spacing={{ xs: 2, md: 3 }}
                 columns={{ xs: 4, sm: 8, md: 12 }}
               >
-                {myTours.length &&
+                {myTours &&
                   myTours.map((mytour) => {
                     return (
                       <Grid item xs={2} sm={4} md={4} key={mytour._id}>

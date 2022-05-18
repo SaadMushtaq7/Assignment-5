@@ -18,7 +18,22 @@ export default function TripCard({
   setTourDeleted,
 }) {
   const [deleteCheck, setDeleteCheck] = useState(false);
+  const [tourDateCheck, setTourDateCheck] = useState(false);
   const deleteTour = () => {
+    const [tDay, tMonth, tYear] = tour.startDate.split("-");
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, "0");
+    let mm = String(today.getMonth() + 1).padStart(2, "0");
+    let yyyy = today.getFullYear().toString();
+
+    if (yyyy >= tYear && mm >= tMonth) {
+      if (yyyy === tYear && mm === tMonth) {
+        if (tDay - dd <= 3) {
+          setTourDateCheck(true);
+          console.log(tourDateCheck);
+        }
+      }
+    }
     setDeleteCheck(true);
   };
   return (
@@ -77,15 +92,16 @@ export default function TripCard({
           </Link>
         )}
       </Card>
-      {deleteCheck ? (
+      {deleteCheck && (
         <DialogBox
+          tourDateCheck={tourDateCheck}
           deleteCheck={deleteCheck}
           bookedTour={tourDetails}
           setDeleteCheck={setDeleteCheck}
           setTourDeleted={setTourDeleted}
+          startDate={tour.startDate}
+          tourName={tour.name}
         />
-      ) : (
-        ""
       )}
     </div>
   );
