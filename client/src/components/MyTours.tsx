@@ -1,39 +1,39 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid } from "@mui/material";
 import TripCard from "../sharedComponents/TripCard";
-import Spinner from "../sharedComponents/Spinner";
 import { getMyTours } from "../services/BookTours";
 import { userSetTours } from "../redux/actions/filesActions";
+import { BookedTourSchema } from "../models/BookedTourSchema";
 import "../styles/tours.css";
 
-export default function MyTours() {
-  const [tourDeleted, setTourDeleted] = useState(false);
+const MyTours:FC = () => {
+    const [tourDeleted, setTourDeleted] = useState<boolean>(false);
 
-  const dispatch = useDispatch();
-  const fetchMyToursResult = useCallback(async () => {
-    const res = await getMyTours();
-    dispatch(userSetTours(res));
-  }, [dispatch]);
-
-  const myTours = useSelector((state) =>
-    state.allmytours.mytours ? state.allmytours.mytours : []
-  );
-
-  const weather = useSelector((state) =>
-    state.allweatherupdates.weather.list
-      ? state.allweatherupdates.weather.list.slice(0, 3)
-      : []
-  );
-
-  useEffect(() => {
-    fetchMyToursResult();
-  }, [fetchMyToursResult, tourDeleted]);
-
+    const dispatch = useDispatch();
+    const fetchMyToursResult = useCallback(async () => {
+      const res = await getMyTours();
+      dispatch(userSetTours(res));
+    }, [dispatch]);
+  
+    const myTours = useSelector((state:any) =>
+      state.allmytours.mytours ? state.allmytours.mytours : []
+    );
+  
+    const weather = useSelector((state:any) =>
+      state.allweatherupdates.weather.list
+        ? state.allweatherupdates.weather.list.slice(0, 3)
+        : []
+    );
+  
+    useEffect(() => {
+      fetchMyToursResult();
+    }, [fetchMyToursResult, tourDeleted]);
+  
   return (
     <div>
       <div className="tours-container">
-        {myTours ? (
+        {myTours && (
           <>
             <div className="results">
               <Grid
@@ -42,7 +42,7 @@ export default function MyTours() {
                 columns={{ xs: 4, sm: 8, md: 12 }}
               >
                 {myTours &&
-                  myTours.map((mytour) => {
+                  myTours.map((mytour:BookedTourSchema) => {
                     return (
                       <Grid item xs={2} sm={4} md={4} key={mytour._id}>
                         <TripCard
@@ -58,10 +58,10 @@ export default function MyTours() {
               </Grid>
             </div>
           </>
-        ) : (
-          <Spinner />
         )}
       </div>
     </div>
-  );
+  )
 }
+
+export default MyTours

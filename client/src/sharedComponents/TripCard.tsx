@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,FC } from "react";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -8,34 +8,44 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DialogBox from "./DialogBox";
+import { BookedTourSchema } from '../models/BookedTourSchema';
+import { TourSchema } from '../models/TourSchema';
 import "../styles/trip-card.css";
 
-export default function TripCard({
-  bookedTour,
-  tour,
-  weather,
-  tourDetails,
-  setTourDeleted,
-}) {
-  const [deleteCheck, setDeleteCheck] = useState(false);
-  const [tourDateCheck, setTourDateCheck] = useState(false);
-  const deleteTour = () => {
-    const [tDay, tMonth, tYear] = tour.startDate.split("-");
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, "0");
-    let mm = String(today.getMonth() + 1).padStart(2, "0");
-    let yyyy = today.getFullYear().toString();
+interface Props{
+    bookedTour:boolean;
+    tour:TourSchema;
+    weather:any;
+    tourDetails:BookedTourSchema | any;
+    setTourDeleted:React.Dispatch<React.SetStateAction<boolean>> | any;
+}
 
-    if (yyyy >= tYear && mm >= tMonth) {
-      if (yyyy === tYear && mm === tMonth) {
-        if (tDay - dd <= 3) {
-          setTourDateCheck(true);
-          console.log(tourDateCheck);
+const TripCard:FC<Props> = ({
+    bookedTour,
+    tour,
+    weather,
+    tourDetails,
+    setTourDeleted,
+  }) => {
+    const [deleteCheck, setDeleteCheck] = useState<boolean>(false);
+    const [tourDateCheck, setTourDateCheck] = useState<boolean>(false);
+    const deleteTour = () => {
+      const [tDay, tMonth, tYear] = tour.startDate.split("-");
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, "0");
+      let mm = String(today.getMonth() + 1).padStart(2, "0");
+      let yyyy = today.getFullYear().toString();
+  
+      if (yyyy >= tYear && mm >= tMonth) {
+        if (yyyy === tYear && mm === tMonth) {
+          if (parseInt(tDay) - parseInt(dd) <= 3) {
+            setTourDateCheck(true);
+            console.log(tourDateCheck);
+          }
         }
       }
-    }
-    setDeleteCheck(true);
-  };
+      setDeleteCheck(true);
+    };
   return (
     <div className="trip-card-container">
       <Card className="tour-card" sx={{ maxWidth: 345 }}>
@@ -99,10 +109,12 @@ export default function TripCard({
           bookedTour={tourDetails}
           setDeleteCheck={setDeleteCheck}
           setTourDeleted={setTourDeleted}
-          startDate={tour.startDate}
           tourName={tour.name}
         />
       )}
     </div>
-  );
+
+  )
 }
+
+export default TripCard

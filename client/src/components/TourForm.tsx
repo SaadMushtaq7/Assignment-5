@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
@@ -7,22 +7,44 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
 import { bookTour, updateMyTour } from "../services/BookTours";
+import { BookedTourSchema } from "../models/BookedTourSchema";
 import "react-phone-number-input/style.css";
 import "../styles/tour-form.css";
 
-export default function TourForm({ tourId, tourDetails }) {
+interface Props {
+    tourId?: string | any;
+    tourDetails?: BookedTourSchema | any;
+}
+
+interface Errors {
+    name?: string;
+    email?: string;
+    numOfAdults?: string;
+    numOfChilds?: string;
+    phoneNumber?: string;
+    paymentMethod?: string;
+  }
+const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [numOfAdults, setNumOfAdults] = useState("");
   const [numOfChilds, setNumOfChilds] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Errors>({});
   const [isSubmit, setIsSubmit] = useState(false);
 
   const validate = useCallback(
-    (userName, userEmail, adults, childs, userPhone, payMethod) => {
-      const tempErrors = {};
+    (userName: string, userEmail: string, adults: string, childs: string, userPhone: string, payMethod: string) => {
+       const tempErrors: Errors = {
+        name: "",
+        email: "",
+        numOfAdults: "",
+        numOfChilds: "",
+        phoneNumber: "",
+        paymentMethod: ""
+       };
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
       const numberRegex = /^\d+$/;
       if (!userName) {
@@ -110,6 +132,7 @@ export default function TourForm({ tourId, tourDetails }) {
       setPaymentMethod(tourDetails.paymentMethod);
     }
   }, [tourDetails, errors, isSubmit, handleSubmit]);
+
 
   return (
     <div className="tour-form-container">
@@ -251,5 +274,7 @@ export default function TourForm({ tourId, tourDetails }) {
         />
       </div>
     </div>
-  );
+  )
 }
+
+export default TourForm

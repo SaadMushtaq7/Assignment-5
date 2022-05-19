@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { FC,useState } from 'react'
 import { Link } from "react-router-dom";
 import MUIDateRangePicker from "../sharedComponents/MUIDateRangePicker";
+import { DateRange } from '@mui/x-date-pickers-pro/DateRangePicker';
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -8,11 +9,13 @@ import Select from "@material-ui/core/Select";
 import { TextField } from "@mui/material";
 import "../styles/search-bar.css";
 
-export default function SearchBar() {
-  const [priceRange, setPriceRange] = useState("");
-  const [city, setCity] = useState("");
-  const [tourDate, setTourDate] = useState([null, null]);
 
+
+const SearchBar:FC = () => {
+  const [priceRange, setPriceRange] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [tourDate, setTourDate] = useState<DateRange<Date>>([null, null]);
+  
   return (
     <div className="searchbar-container">
       <div className="container">
@@ -22,7 +25,7 @@ export default function SearchBar() {
               <i className="fa-solid fa-location-dot" /> Location
             </p>
             <TextField
-              d="standard-basic"
+              //d="standard-basic"
               label="City"
               variant="standard"
               value={city}
@@ -49,7 +52,7 @@ export default function SearchBar() {
                 id="demo-simple-select"
                 value={priceRange}
                 label="priceRange"
-                onChange={(e) => setPriceRange(e.target.value)}
+                onChange={(e) => setPriceRange(e.target.value as string)}
               >
                 <MenuItem value={"50-200"}>$50-$200</MenuItem>
                 <MenuItem value={"200-400"}>$200-$400</MenuItem>
@@ -87,3 +90,5 @@ export default function SearchBar() {
     </div>
   );
 }
+
+export default SearchBar

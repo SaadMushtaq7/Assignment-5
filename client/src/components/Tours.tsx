@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -13,55 +13,56 @@ import { fetchWeather } from "../services/Weather";
 import { fetchTours } from "../services/Tours";
 import { setTours, setWeather } from "../redux/actions/filesActions";
 import "../styles/tours.css";
+import { TourSchema } from "../models/TourSchema";
 
-export default function Tours() {
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const stateReceived = location.state;
-  const [filter, setFilter] = useState(null);
-
-  const fetchWeatherResult = useCallback(async () => {
-    const res = await fetchWeather(
-      stateReceived.city ? stateReceived.city : "Miami"
+const Tours:FC = () => {
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const stateReceived:any = location.state;
+    const [filter, setFilter] = useState<string>('');
+  
+    const fetchWeatherResult = useCallback(async () => {
+      const res = await fetchWeather(
+        stateReceived.city ? stateReceived.city : "Miami"
+      );
+      dispatch(setWeather(res));
+    }, [dispatch, stateReceived]);
+  
+    const fetchToursResult = useCallback(async () => {
+      const res = await fetchTours();
+      fetchWeatherResult();
+      dispatch(setTours(res));
+    }, [dispatch, fetchWeatherResult]);
+  
+    const tours = useSelector((state:any) =>
+      state.alltours.tours ? state.alltours.tours : []
     );
-    dispatch(setWeather(res));
-  }, [dispatch, stateReceived]);
-
-  const fetchToursResult = useCallback(async () => {
-    const res = await fetchTours();
-    fetchWeatherResult();
-    dispatch(setTours(res));
-  }, [dispatch, fetchWeatherResult]);
-
-  const tours = useSelector((state) =>
-    state.alltours.tours ? state.alltours.tours : []
-  );
-  const weather = useSelector((state) =>
-    state.allweatherupdates.weather.list
-      ? state.allweatherupdates.weather.list.slice(0, 3)
-      : []
-  );
-  useEffect(() => {
-    fetchToursResult();
-    if (stateReceived) {
-      if (
-        stateReceived.city &&
-        stateReceived.priceRange === "" &&
-        stateReceived.tourDate === ""
-      ) {
-        setFilter("city");
-      } else if (
-        stateReceived.city === "" &&
-        stateReceived.priceRange &&
-        stateReceived.tourDate === [null, null]
-      ) {
-        setFilter("price");
-      } else {
-        setFilter("city");
+    const weather = useSelector((state:any) =>
+      state.allweatherupdates.weather.list
+        ? state.allweatherupdates.weather.list.slice(0, 3)
+        : []
+    );
+    useEffect(() => {
+      fetchToursResult();
+      if (stateReceived) {
+        if (
+          stateReceived.city &&
+          stateReceived.priceRange === "" &&
+          stateReceived.tourDate === ""
+        ) {
+          setFilter("city");
+        } else if (
+          stateReceived.city === "" &&
+          stateReceived.priceRange &&
+          stateReceived.tourDate === [null, null]
+        ) {
+          setFilter("price");
+        } else {
+          setFilter("city");
+        }
       }
-    }
-  }, [fetchToursResult, stateReceived]);
-
+    }, [fetchToursResult, stateReceived]);
+  
   return (
     <div className="tours-container">
       <div className="upper-display">
@@ -86,7 +87,7 @@ export default function Tours() {
                     value={filter}
                     label="Filter"
                     onChange={(e) => {
-                      setFilter(e.target.value);
+                      setFilter(e.target.value as string);
                     }}
                   >
                     <MenuItem className="filter-option" value="city">
@@ -113,7 +114,7 @@ export default function Tours() {
         >
           {tours &&
             tours
-              .filter((tour) => {
+              .filter((tour:TourSchema) => {
                 if (!filter) {
                   return tour;
                 } else {
@@ -145,13 +146,15 @@ export default function Tours() {
                   return null;
                 }
               })
-              .map((tour) => (
+              .map((tour:TourSchema) => (
                 <Grid item xs={2} sm={4} md={4} key={tour._id}>
-                  <TripCard bookedTour={false} tour={tour} weather={weather} />
+                  <TripCard tourDetails={null} setTourDeleted={null}  bookedTour={false} tour={tour} weather={weather} />
                 </Grid>
               ))}
         </Grid>
       </div>
     </div>
-  );
+  )
 }
+
+export default Tours

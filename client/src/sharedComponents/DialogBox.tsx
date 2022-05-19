@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from 'react';
 import { useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -8,35 +8,47 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { deleteMyTour } from "../services/BookTours";
 import { userDeleteTour } from "../redux/actions/filesActions";
+import { BookedTourSchema } from '../models/BookedTourSchema';
 
-export default function DialogBox({
-  deleteCheck,
-  setDeleteCheck,
-  bookedTour,
-  setTourDeleted,
-  tourDateCheck,
-  tourName,
-}) {
-  const [open, setOpen] = useState(deleteCheck);
+interface Props{
+  deleteCheck: boolean;
+  setDeleteCheck: React.Dispatch<React.SetStateAction<boolean>>;
+  bookedTour: BookedTourSchema;
+  setTourDeleted: React.Dispatch<React.SetStateAction<boolean>>;
+  tourDateCheck:boolean;
+  tourName:string;
+}
 
-  const dispatch = useDispatch();
+const DialogBox:FC<Props> = (
+    {
+        deleteCheck,
+        setDeleteCheck,
+        bookedTour,
+        setTourDeleted,
+        tourDateCheck,
+        tourName,
+      }) => {
+      const [open, setOpen] = useState(deleteCheck);
 
-  const handleClose = async () => {
-    if (!tourDateCheck) {
-      await deleteMyTour(bookedTour._id);
-      dispatch(userDeleteTour(bookedTour));
-      setTourDeleted(true);
-    } else {
-      setOpen(false);
-    }
-
-    setDeleteCheck(false);
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
+      const dispatch = useDispatch();
+    
+      const handleClose = async () => {
+        if (!tourDateCheck) {
+          await deleteMyTour(bookedTour._id);
+          dispatch(userDeleteTour(bookedTour));
+          setTourDeleted(true);
+        } else {
+          setOpen(false);
+        }
+    
+        setDeleteCheck(false);
+      };
+    
+      const handleCancel = () => {
+        setOpen(false);
+      };
+    
+ 
   return (
     <div className="dialog-box-container">
       {tourDateCheck ? (
@@ -96,5 +108,7 @@ export default function DialogBox({
         </Dialog>
       )}
     </div>
-  );
+  )
 }
+
+export default DialogBox

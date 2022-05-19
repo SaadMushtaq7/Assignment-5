@@ -5,7 +5,7 @@ const API = {
   base: `https://api.openweathermap.org/data/2.5/`,
 };
 
-export const fetchWeather = async (city) => {
+export const fetchWeather = async (city:string) => {
   const res = await axios
     .get(`${API.base}forecast?q=${city}&appid=${API.key}`)
     .then(async (response) => {

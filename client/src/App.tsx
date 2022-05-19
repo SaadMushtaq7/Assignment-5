@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import HomePage from "./components/HomePage";
@@ -10,7 +11,7 @@ import MyTours from "./components/MyTours";
 import store from "./redux/store";
 import "./App.css";
 
-function App() {
+const App:FC = () => {
   return (
     <Provider store={store}>
       <Router>

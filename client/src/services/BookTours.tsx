@@ -1,13 +1,13 @@
 import axios from "axios";
 
 export const bookTour = async (
-  name,
-  email,
-  phoneNo,
-  numOfAdults,
-  numOfChilds,
-  paymentMethod,
-  tourId
+  name: string,
+  email: string,
+  phoneNo: string,
+  numOfAdults: string,
+  numOfChilds: string,
+  paymentMethod: string,
+  tourId:string|any
 ) => {
   await axios
     .post("http://localhost:3001/bookMyTour", {
@@ -41,14 +41,14 @@ export const getMyTours = async () => {
 };
 
 export const updateMyTour = async (
-  name,
-  email,
-  phoneNo,
-  numOfAdults,
-  numOfChilds,
-  paymentMethod,
-  tourId,
-  bookedTourId
+  name: string,
+  email: string,
+  phoneNo: string,
+  numOfAdults: string,
+  numOfChilds: string,
+  paymentMethod: string,
+  tourId: string | any,
+  bookedTourId: string
 ) => {
   await axios
     .put(`http://localhost:3001/updateTour/${bookedTourId}`, {
@@ -68,7 +68,7 @@ export const updateMyTour = async (
     });
 };
 
-export const deleteMyTour = async (bookedTourId) => {
+export const deleteMyTour = async (bookedTourId: string) => {
   await axios
     .delete(`http://localhost:3001/deleteTour/${bookedTourId}`)
     .then((res) => {
