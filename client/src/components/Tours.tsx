@@ -12,8 +12,8 @@ import TripCard from "../sharedComponents/TripCard";
 import { fetchWeather } from "../services/Weather";
 import { fetchTours } from "../services/Tours";
 import { setTours, setWeather } from "../redux/actions/filesActions";
-import "../styles/tours.css";
 import { TourSchema } from "../models/TourSchema";
+import "../styles/tours.css";
 
 const Tours:FC = () => {
     const dispatch = useDispatch();

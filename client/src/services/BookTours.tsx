@@ -7,7 +7,7 @@ export const bookTour = async (
   numOfAdults: string,
   numOfChilds: string,
   paymentMethod: string,
-  tourId:string|any
+  tourId:string
 ) => {
   await axios
     .post("http://localhost:3001/bookMyTour", {
@@ -20,7 +20,8 @@ export const bookTour = async (
       tourId,
     })
     .then((res) => {
-      console.log("Tour Booked ");
+      console.log("Tour Booked");
+      
     })
     .catch((err) => {
       console.log(`Error Booking Tour: ${err}`);
@@ -47,7 +48,7 @@ export const updateMyTour = async (
   numOfAdults: string,
   numOfChilds: string,
   paymentMethod: string,
-  tourId: string | any,
+  tourId: string,
   bookedTourId: string
 ) => {
   await axios

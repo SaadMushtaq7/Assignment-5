@@ -1,4 +1,4 @@
-import React,{FC} from 'react'
+import {FC} from 'react'
 import SearchBar from "./SearchBar";
 import "../styles/home-page.css";
 

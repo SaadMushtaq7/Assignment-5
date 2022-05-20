@@ -26,25 +26,18 @@ interface Errors {
   }
 const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [numOfAdults, setNumOfAdults] = useState("");
-  const [numOfChilds, setNumOfChilds] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [numOfAdults, setNumOfAdults] = useState<string>("");
+  const [numOfChilds, setNumOfChilds] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
   const validate = useCallback(
     (userName: string, userEmail: string, adults: string, childs: string, userPhone: string, payMethod: string) => {
-       const tempErrors: Errors = {
-        name: "",
-        email: "",
-        numOfAdults: "",
-        numOfChilds: "",
-        phoneNumber: "",
-        paymentMethod: ""
-       };
+       const tempErrors: Errors = {};
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
       const numberRegex = /^\d+$/;
       if (!userName) {
@@ -107,6 +100,12 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
         paymentMethod,
         tourId
       );
+      setName("");
+      setEmail("");
+      setNumOfAdults("");
+      setNumOfChilds("");
+      setPhoneNumber("");
+      setPaymentMethod("");
     }
   }, [
     name,
@@ -120,6 +119,7 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
   ]);
 
   useEffect(() => {
+    console.log(Object.keys(errors).length, isSubmit)
     if (Object.keys(errors).length === 0 && isSubmit) {
       handleSubmit();
     }
@@ -135,6 +135,7 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
 
 
   return (
+    <>
     <div className="tour-form-container">
       <div className="split form">
         <div>
@@ -274,6 +275,7 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
         />
       </div>
     </div>
+    </>
   )
 }
 
