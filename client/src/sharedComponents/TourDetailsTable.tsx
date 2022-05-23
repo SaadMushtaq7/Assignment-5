@@ -18,7 +18,7 @@ interface Props{
     facilities:string[];
 }
 
-const TripDetailsTable:FC<Props> = ({city, endDate, facilities}) => {
+const TourDetailsTable:FC<Props> = ({city, endDate, facilities}) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -73,4 +73,4 @@ const TripDetailsTable:FC<Props> = ({city, endDate, facilities}) => {
   )
 }
 
-export default TripDetailsTable
+export default TourDetailsTable

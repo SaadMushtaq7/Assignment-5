@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import TripDetailsTable from "../sharedComponents/TripDetailsTable";
+import TourDetailsTable from "../sharedComponents/TourDetailsTable";
 import WeatherCard from "../sharedComponents/WeatherCard";
 import Button from "@mui/material/Button";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import "../styles/trip-details.css";
 
-const TripDetails = () => {
+const TourDetails = () => {
   const location = useLocation();
   const state:any = location.state;
   const {tour, weather, bookedTour} = state;
@@ -54,7 +54,7 @@ const TripDetails = () => {
       <div className="trip-description">{description}</div>
       <div className="trip-table details">
         <h4>What's included</h4>
-        <TripDetailsTable
+        <TourDetailsTable
           city={city}
           endDate={endDate}
           facilities={facilities}
@@ -82,4 +82,4 @@ const TripDetails = () => {
   )
 }
 
-export default TripDetails
+export default TourDetails

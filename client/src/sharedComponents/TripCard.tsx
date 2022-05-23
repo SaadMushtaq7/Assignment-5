@@ -78,7 +78,7 @@ const TripCard:FC<Props> = ({
             <DeleteIcon onClick={deleteTour} className="delete-btn" />
             <Link
               style={{ textDecoration: "none" }}
-              to="/tripDetails"
+              to="/tourDetails"
               state={{ tour: tour, weather: weather }}
             >
               <button className="my-tours-option">View Details</button>
@@ -94,7 +94,7 @@ const TripCard:FC<Props> = ({
         ) : (
           <Link
             style={{ textDecoration: "none" }}
-            to="/tripDetails"
+            to="/tourDetails"
             state={{ tour: tour, weather: weather, bookedTour:bookedTour }}
           >
             <button className="tours-option">View Details</button>
