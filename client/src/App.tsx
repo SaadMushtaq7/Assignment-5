@@ -5,11 +5,10 @@ import HomePage from "./components/HomePage";
 import Tours from "./components/Tours";
 import NavBar from "./components/NavBar";
 import TripDetails from "./components/TripDetails";
-import BookTour from "./components/BookTour";
-import UpdateTour from "./components/UpdateTour";
 import MyTours from "./components/MyTours";
 import store from "./redux/store";
 import "./App.css";
+import TourForm from "./components/TourForm";
 
 const App:FC = () => {
   return (
@@ -23,8 +22,8 @@ const App:FC = () => {
             <Route path="/tours" element={<Tours />} />
             <Route path="/myTours" element={<MyTours />} />
             <Route path="/tripDetails" element={<TripDetails />} />
-            <Route path="/addTour" element={<BookTour />} />
-            <Route path="/updateTour" element={<UpdateTour />} />
+            <Route path="/addTour" element={<TourForm />} />
+            <Route path="/updateTour" element={<TourForm />} />
           </Routes>
         </>
       </Router>

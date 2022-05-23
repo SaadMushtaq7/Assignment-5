@@ -17,21 +17,21 @@ export const setTours = (files:TourSchema) => {
     payload: files,
   };
 };
-export const userSetTours = (files:BookedTourSchema) => {
+export const setBookedTours = (files:BookedTourSchema) => {
   return {
-    type: ActionTypes.USER_SET_TOURS,
+    type: ActionTypes.SET_BOOKED_TOURS,
     payload: files,
   };
 };
-export const userDeleteTour = (file:BookedTourSchema) => {
+export const deleteBookedTour = (file:BookedTourSchema) => {
   return {
-    type: ActionTypes.USER_DELETE_TOUR,
+    type: ActionTypes.DELETE_BOOKED_TOUR,
     payload: file,
   };
 };
-export const userEditTour = (file:BookedTourSchema) => {
+export const updateBookedTour = (file:BookedTourSchema) => {
   return {
-    type: ActionTypes.USER_UPDATE_TOUR,
+    type: ActionTypes.UPDATE_BOOKED_TOUR,
     payload: file,
   };
 };

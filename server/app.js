@@ -23,6 +23,23 @@ app.get("/getTours", (req, res) => {
   });
 });
 
+app.post("/postTour", async (req, res) => {
+  const tour = {
+    name: req.body.name,
+    city: req.body.city,
+    images: req.body.images,
+    description: req.body.description,
+    price: req.body.price,
+    duration: req.body.duration,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+    facilities: req.body.facilities,
+  };
+  const myTour = new TourModel(tour);
+  await myTour.save();
+  res.json(tour);
+});
+
 app.post("/bookMyTour", async (req, res) => {
   const tour = {
     name: req.body.name,

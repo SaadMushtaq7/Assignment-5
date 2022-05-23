@@ -13,7 +13,7 @@ import { TourSchema } from '../models/TourSchema';
 import "../styles/trip-card.css";
 
 interface Props{
-    bookedTour:boolean;
+    bookedTour?:boolean;
     tour:TourSchema;
     weather:any;
     tourDetails:BookedTourSchema | any;
@@ -40,7 +40,6 @@ const TripCard:FC<Props> = ({
         if (yyyy === tYear && mm === tMonth) {
           if (parseInt(tDay) - parseInt(dd) <= 3) {
             setTourDateCheck(true);
-            console.log(tourDateCheck);
           }
         }
       }
@@ -52,8 +51,8 @@ const TripCard:FC<Props> = ({
         <CardMedia
           component="img"
           height="140"
-          image="https://media.cntraveler.com/photos/5a737898b528a60bf010815f/16:9/w_2560,c_limit/Perez-Art-Museum__2018_Pe%CC%81rez-Art-Museum-Miami,-east-facade.-Photo-by-Daniel-Azoulay-Photography.jpg"
-          alt="green iguana"
+          image={tour.images[0]}
+          alt="tour-place"
         />
         <CardContent>
           <Typography
@@ -87,7 +86,7 @@ const TripCard:FC<Props> = ({
             <Link
               style={{ textDecoration: "none" }}
               to="/updateTour"
-              state={{ tourDetails: tourDetails }}
+              state={{ tourDetails: tourDetails, tourImage: tour.images[0], bookedTour: bookedTour}}
             >
               <button className="my-tours-option">Update</button>
             </Link>
@@ -96,7 +95,7 @@ const TripCard:FC<Props> = ({
           <Link
             style={{ textDecoration: "none" }}
             to="/tripDetails"
-            state={{ tour: tour, weather: weather }}
+            state={{ tour: tour, weather: weather, bookedTour:bookedTour }}
           >
             <button className="tours-option">View Details</button>
           </Link>

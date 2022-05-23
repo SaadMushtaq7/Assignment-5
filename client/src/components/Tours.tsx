@@ -18,15 +18,17 @@ import "../styles/tours.css";
 const Tours:FC = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const stateReceived:any = location.state;
-    const [filter, setFilter] = useState<string>('');
-  
+    const state:any = location.state;
+    const [filter, setFilter] = useState<string>("");
+    const {city, price, tourDate} = state ? state : [null,null,null];
+    const filterRef = React.useRef<HTMLSelectElement>(null);
+    
     const fetchWeatherResult = useCallback(async () => {
       const res = await fetchWeather(
-        stateReceived.city ? stateReceived.city : "Miami"
+        state ? city : "Miami"
       );
       dispatch(setWeather(res));
-    }, [dispatch, stateReceived]);
+    }, [dispatch, city, state]);
   
     const fetchToursResult = useCallback(async () => {
       const res = await fetchTours();
@@ -42,26 +44,13 @@ const Tours:FC = () => {
         ? state.allweatherupdates.weather.list.slice(0, 3)
         : []
     );
+
     useEffect(() => {
       fetchToursResult();
-      if (stateReceived) {
-        if (
-          stateReceived.city &&
-          stateReceived.priceRange === "" &&
-          stateReceived.tourDate === ""
-        ) {
+      if (state) {
           setFilter("city");
-        } else if (
-          stateReceived.city === "" &&
-          stateReceived.priceRange &&
-          stateReceived.tourDate === [null, null]
-        ) {
-          setFilter("price");
-        } else {
-          setFilter("city");
-        }
       }
-    }, [fetchToursResult, stateReceived]);
+    }, [fetchToursResult, state]);
   
   return (
     <div className="tours-container">
@@ -69,11 +58,7 @@ const Tours:FC = () => {
         {filter && (
           <>
             <h2>
-              {stateReceived.city &&
-                stateReceived.price &&
-                stateReceived.tourDate &&
-                `Top Destinations at "
-              ${filter === "city" ? stateReceived.city : stateReceived.price}"`}
+              { `Top Destinations at "${state[`${filter}`]}"`}
             </h2>
             <div className="filter-search">
               <FilterListIcon className="filter-icon" />
@@ -81,14 +66,15 @@ const Tours:FC = () => {
                 <FormControl className="filter-form" fullWidth>
                   <InputLabel id="demo-simple-select-label">Filter</InputLabel>
                   <Select
+                    ref={filterRef}
+                    onChange={(e:React.ChangeEvent<{value:unknown}>) => {
+                      setFilter(e.target.value as string);
+                   }}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     className="filter-select"
                     value={filter}
                     label="Filter"
-                    onChange={(e) => {
-                      setFilter(e.target.value as string);
-                    }}
                   >
                     <MenuItem className="filter-option" value="city">
                       City
@@ -112,45 +98,57 @@ const Tours:FC = () => {
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
-          {tours &&
-            tours
-              .filter((tour:TourSchema) => {
-                if (!filter) {
-                  return tour;
-                } else {
-                  if (filter === "city") {
-                    if (
-                      tour.city.toLowerCase() ===
-                      stateReceived.city.toLowerCase()
-                    ) {
-                      return tour;
-                    } else if (stateReceived.city.length === 0) {
-                      return tour;
-                    }
-                  } else if (filter === "price") {
-                    const [startPrice, endPrice] =
-                      stateReceived.price.split("-");
-
-                    if (
-                      parseInt(tour.price) >= parseInt(startPrice) &&
-                      parseInt(tour.price) <= parseInt(endPrice)
-                    ) {
-                      return tour;
-                    } else if (stateReceived.price.length === 0) {
-                      return tour;
-                    }
-                  } else if (filter === "date") {
-                    return tour;
-                  }
-
-                  return null;
-                }
-              })
-              .map((tour:TourSchema) => (
-                <Grid item xs={2} sm={4} md={4} key={tour._id}>
-                  <TripCard tourDetails={null} setTourDeleted={null}  bookedTour={false} tour={tour} weather={weather} />
-                </Grid>
-              ))}
+          {(state) ? (
+                    tours &&
+                    tours
+                      .filter((tour:TourSchema) => {
+                        if (!filter) {
+                          return tour;
+                        } else {
+                          if (filter === "city") {
+                            if (
+                              tour.city.toLowerCase() ===
+                              city.toLowerCase()
+                            ) {
+                              return tour;
+                            } else if (city.length === 0) {
+                              return tour;
+                            }
+                          } else if (filter === "price") {
+                            const [startPrice, endPrice] =
+                              price.split("-");
+        
+                            if (
+                              parseInt(tour.price) >= parseInt(startPrice) &&
+                              parseInt(tour.price) <= parseInt(endPrice)
+                            ) {
+                              return tour;
+                            } else if (price.length === 0) {
+                              return tour;
+                            }
+                          } else if (filter === "date") {
+                            if(tourDate){
+                              return tour;
+                            }
+                            
+                          }
+        
+                          return null;
+                        }
+                      })
+                      .map((tour:TourSchema) => (
+                        <Grid item xs={2} sm={4} md={4} key={tour._id}>
+                          <TripCard tourDetails={null} setTourDeleted={null}  bookedTour={false} tour={tour} weather={weather} />
+                        </Grid>
+                      ))
+          ):(
+            tours.map((tour:TourSchema) => (
+              <Grid item xs={2} sm={4} md={4} key={tour._id}>
+                <TripCard tourDetails={null} setTourDeleted={null}  bookedTour={false} tour={tour} weather={weather} />
+              </Grid>
+            ))
+          )}
+          
         </Grid>
       </div>
     </div>

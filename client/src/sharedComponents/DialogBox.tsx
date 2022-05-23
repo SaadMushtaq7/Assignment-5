@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { deleteMyTour } from "../services/BookTours";
-import { userDeleteTour } from "../redux/actions/filesActions";
+import { deleteBookedTour } from "../redux/actions/filesActions";
 import { BookedTourSchema } from '../models/BookedTourSchema';
 
 interface Props{
@@ -35,7 +35,7 @@ const DialogBox:FC<Props> = (
       const handleClose = async () => {
         if (!tourDateCheck) {
           await deleteMyTour(bookedTour._id);
-          dispatch(userDeleteTour(bookedTour));
+          dispatch(deleteBookedTour(bookedTour));
           setTourDeleted(true);
         } else {
           setOpen(false);

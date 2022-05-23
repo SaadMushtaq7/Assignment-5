@@ -1,3 +1,6 @@
+.form-heading{
+    margin-left: 180px;
+}
 .tour-form-container{
     display: flex;
     flex-direction: row;
@@ -35,6 +38,7 @@
   .tour-form-container .form div.members{
       display: flex;
       flex-direction: row;
+      height: 150px;
       
   }
   .tour-form-container .form div.members .adults-childs{

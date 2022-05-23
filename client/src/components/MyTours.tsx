@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Grid } from "@mui/material";
 import TripCard from "../sharedComponents/TripCard";
 import { getMyTours } from "../services/BookTours";
-import { userSetTours } from "../redux/actions/filesActions";
+import { fetchWeather } from "../services/Weather";
+import { setBookedTours, setWeather } from "../redux/actions/filesActions";
 import { BookedTourSchema } from "../models/BookedTourSchema";
 import "../styles/tours.css";
 
@@ -11,10 +12,19 @@ const MyTours:FC = () => {
     const [tourDeleted, setTourDeleted] = useState<boolean>(false);
 
     const dispatch = useDispatch();
+
+    const fetchWeatherResult = useCallback(async () => {
+      const res = await fetchWeather(
+        "Miami"
+      );
+      dispatch(setWeather(res));
+    }, [dispatch]);
+  
     const fetchMyToursResult = useCallback(async () => {
       const res = await getMyTours();
-      dispatch(userSetTours(res));
-    }, [dispatch]);
+      fetchWeatherResult();
+      dispatch(setBookedTours(res));
+    }, [dispatch, fetchWeatherResult]);
   
     const myTours = useSelector((state:any) =>
       state.allmytours.mytours ? state.allmytours.mytours : []

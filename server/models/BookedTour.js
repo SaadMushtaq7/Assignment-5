@@ -3,27 +3,21 @@ const mongoose = require("mongoose");
 const myTourSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
-    required: true,
   },
   phoneNo: {
     type: String,
-    required: true,
   },
   numOfAdults: {
-    type: Number,
-    required: true,
+    type: String,
   },
   numOfChilds: {
-    type: Number,
-    required: true,
+    type: String,
   },
   paymentMethod: {
     type: String,
-    required: true,
   },
   tours: {
     type: mongoose.Schema.Types.ObjectId,

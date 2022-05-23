@@ -27,21 +27,21 @@ export const tourReducer = (state = initialState, { type, payload }:{type:any,pa
 
 export const myTourReducer = (state = initialState, { type, payload }:{type:any,payload:BookedTourSchema}) => {
   switch (type) {
-    case ActionTypes.USER_SET_TOURS:
+    case ActionTypes.SET_BOOKED_TOURS:
       return { ...state, mytours: payload };
 
-    case ActionTypes.USER_UPDATE_TOUR: {
-      const tourUpdate = state.mytours.filter((tour: TourSchema) =>
+    case ActionTypes.UPDATE_BOOKED_TOUR: {
+      const updatedTour = state.mytours.filter((tour: TourSchema) =>
         tour._id === payload._id ? Object.assign(tour, payload) : tour
       );
-      state.mytours = tourUpdate;
+      state.mytours = updatedTour;
       return state;
     }
-    case ActionTypes.USER_DELETE_TOUR: {
-      const tourDelete = state.mytours.filter(
+    case ActionTypes.DELETE_BOOKED_TOUR: {
+      const filteredTours = state.mytours.filter(
         (tour: TourSchema) => tour._id !== payload._id
       );
-      state.mytours = tourDelete;
+      state.mytours = filteredTours;
       return state;
     }
 

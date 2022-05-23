@@ -6,26 +6,22 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
+import { ToastContainer, toast } from "react-toastify";
 import { bookTour, updateMyTour } from "../services/BookTours";
-import { BookedTourSchema } from "../models/BookedTourSchema";
-import "react-phone-number-input/style.css";
+import "react-toastify/dist/ReactToastify.css";
 import "../styles/tour-form.css";
-
-interface Props {
-    tourId?: string | any;
-    tourDetails?: BookedTourSchema | any;
-}
+import { useLocation } from "react-router-dom";
 
 interface Errors {
-    name?: string;
-    email?: string;
-    numOfAdults?: string;
-    numOfChilds?: string;
-    phoneNumber?: string;
-    paymentMethod?: string;
-  }
-const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
+  name?: string;
+  email?: string;
+  numOfAdults?: string;
+  numOfChilds?: string;
+  phoneNumber?: string;
+  paymentMethod?: string;
+}
 
+const TourForm:FC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [numOfAdults, setNumOfAdults] = useState<string>("");
@@ -33,96 +29,101 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
-  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const location = useLocation();
+  const state: any = location.state;
+  const {tourDetails, tourImage,bookedTour, tour} = state ? state : [null, null,null]
 
-  const validate = useCallback(
-    (userName: string, userEmail: string, adults: string, childs: string, userPhone: string, payMethod: string) => {
-       const tempErrors: Errors = {};
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-      const numberRegex = /^\d+$/;
-      if (!userName) {
-        tempErrors.name = "This field is required!";
-      }
-      if (!emailRegex.test(userEmail)) {
-        tempErrors.email = "Enter a valid Email address!";
-      }
-      if (!numberRegex.test(adults)) {
-        tempErrors.numOfAdults = "Enter a valid Number!";
-      }
-      if (!numberRegex.test(childs)) {
-        tempErrors.numOfChilds = "Enter a valid Number!";
-      }
-      if (!(numberRegex.test(userPhone) && userPhone.length === 11)) {
-        tempErrors.phoneNumber = "Enter a valid Phone Number!";
-      }
-      if (!payMethod) {
-        tempErrors.paymentMethod = "Select on option!";
-      }
+  const errorHandling = useCallback(() =>{
+    const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const numReg = /^\d+$/; 
+    if(name.length<1){
+      setErrors({name:'This field is required'})
+      return true;
 
-      return tempErrors;
-    },
-    []
-  );
+    }
 
-  const handleError = () => {
-    setErrors(
-      validate(
-        name,
-        email,
-        numOfAdults,
-        numOfChilds,
-        phoneNumber,
-        paymentMethod
-      )
-    );
-    setIsSubmit(true);
-  };
+    if(!emailReg.test(email)){
+        setErrors({email:'Enter a valid Email'})
+        return true
+    }
+
+
+    if(!numReg.test(phoneNumber) || phoneNumber.length!==11){
+      setErrors({phoneNumber:'Enter a valid Phone Number i.e 03xxxxxxxxx'})
+      return true;
+
+    }
+    
+    if(!numReg.test(numOfAdults) || numOfAdults.length===0){
+      setErrors({numOfAdults:'Enter a valid number'})
+      return true;
+
+    }
+
+    if(!numReg.test(numOfChilds) || numOfChilds.length===0){
+      setErrors({numOfChilds:'Enter a valid number'})
+      return true;
+    }
+
+    if(paymentMethod.length===0){
+      setErrors({paymentMethod:'Select an option'})
+      return true;
+    }
+    return false
+    
+  },[email,name.length,numOfAdults, numOfChilds, paymentMethod.length, phoneNumber])
 
   const handleSubmit = useCallback(async () => {
-    if (tourDetails) {
-      await updateMyTour(
-        name,
-        email,
-        numOfAdults,
-        numOfChilds,
-        phoneNumber,
-        paymentMethod,
-        tourId,
-        tourDetails._id
-      );
-    } else {
-      await bookTour(
-        name,
-        email,
-        numOfAdults,
-        numOfChilds,
-        phoneNumber,
-        paymentMethod,
-        tourId
-      );
-      setName("");
-      setEmail("");
-      setNumOfAdults("");
-      setNumOfChilds("");
-      setPhoneNumber("");
-      setPaymentMethod("");
+    if(!errorHandling()){
+      if (!tour) {
+        await updateMyTour(
+          name,
+          email,
+          numOfAdults,
+          numOfChilds,
+          phoneNumber,
+          paymentMethod,
+          tourDetails.tours._id,
+          tourDetails._id
+        );
+        toast.success("Tour Updated!");
+      } else {
+        await bookTour(
+          name,
+          email,
+          phoneNumber,
+          numOfAdults,
+          numOfChilds,
+          paymentMethod,
+          tour._id
+        );
+  
+        setName("");
+        setEmail("");
+        setNumOfAdults("");
+        setNumOfChilds("");
+        setPhoneNumber("");
+        setPaymentMethod("");
+        toast.success("Tour Booked!");
+      }
     }
+    else{
+      toast.error('Check Input Fields')
+    }
+    
   }, [
     name,
     email,
+    phoneNumber,
     numOfAdults,
     numOfChilds,
-    phoneNumber,
     paymentMethod,
-    tourId,
+    tour,
     tourDetails,
+    errorHandling
   ]);
 
   useEffect(() => {
-    console.log(Object.keys(errors).length, isSubmit)
-    if (Object.keys(errors).length === 0 && isSubmit) {
-      handleSubmit();
-    }
     if (tourDetails) {
       setName(tourDetails.name);
       setEmail(tourDetails.email);
@@ -131,12 +132,14 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
       setPhoneNumber(tourDetails.phoneNo);
       setPaymentMethod(tourDetails.paymentMethod);
     }
-  }, [tourDetails, errors, isSubmit, handleSubmit]);
+  }, [tourDetails]);
 
 
   return (
     <>
+    <h1 className="form-heading">{bookedTour ? `Update Your Booking` : `Confirm Your Booking`}</h1>
     <div className="tour-form-container">
+      
       <div className="split form">
         <div>
           <TextField
@@ -145,8 +148,12 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
             label="Name"
             value={name}
             onChange={(e) => {
+              setErrors({name:''});
               setName(e.target.value);
+              
             }}
+            error={Boolean(errors.name)}
+            helperText={errors.name}
             InputProps={{ style: { width: 400, paddingLeft: 20 } }}
             InputLabelProps={{
               style: { width: 400, marginTop: 10 },
@@ -154,7 +161,7 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
             variant="outlined"
             autoComplete="off"
           />
-          <p className="error-msg">{errors.name}</p>
+          
         </div>
         <div>
           <TextField
@@ -163,8 +170,12 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
             label="Email"
             value={email}
             onChange={(e) => {
+              setErrors({email:''})
               setEmail(e.target.value);
+              
             }}
+            error={Boolean(errors.email)}
+            helperText={errors.email}
             InputProps={{ style: { width: 400, paddingLeft: 20 } }}
             InputLabelProps={{
               style: { width: 400, marginTop: 10 },
@@ -172,7 +183,7 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
             variant="outlined"
             autoComplete="off"
           />
-          <p className="error-msg">{errors.email}</p>
+          
         </div>
         <div className="phone-number">
           <TextField
@@ -181,15 +192,20 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
             label="Phone No."
             value={phoneNumber}
             onChange={(e) => {
+              setErrors({phoneNumber:''});
               setPhoneNumber(e.target.value);
+              
             }}
+            error={Boolean(errors.phoneNumber)}
+            helperText={errors.phoneNumber}
             InputProps={{ style: { width: 400, paddingLeft: 20 } }}
             InputLabelProps={{
               style: { width: 400, marginTop: 10 },
             }}
             variant="outlined"
+            autoComplete="off"
           />
-          <p className="error-msg">{errors.phoneNumber}</p>
+          
         </div>
         <div className="members">
           <div className="adults-childs">
@@ -199,8 +215,12 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
               label="Number of Adults"
               value={numOfAdults}
               onChange={(e) => {
+                setErrors({numOfAdults:''})
                 setNumOfAdults(e.target.value);
+                
               }}
+              error={Boolean(errors.numOfAdults)}
+              helperText={errors.numOfAdults}
               InputProps={{
                 style: { width: 200, marginLeft: 0 },
               }}
@@ -208,8 +228,9 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
                 style: { width: 200, marginTop: 10 },
               }}
               variant="outlined"
+              autoComplete="off"
             />
-            <p className="error-msg">{errors.numOfAdults}</p>
+            
           </div>
           <div className="adults-childs">
             <TextField
@@ -218,8 +239,11 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
               label="Number of Childrens"
               value={numOfChilds}
               onChange={(e) => {
+                setErrors({numOfChilds:''})
                 setNumOfChilds(e.target.value);
               }}
+              error={Boolean(errors.numOfChilds)}
+              helperText={errors.numOfChilds}
               InputProps={{
                 style: { width: 180, paddingLeft: 20, marginLeft: 10 },
               }}
@@ -227,8 +251,9 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
                 style: { width: 180, marginTop: 10, marginLeft: 10 },
               }}
               variant="outlined"
+              autoComplete="off"
             />
-            <p className="error-msg">{errors.numOfChilds}</p>
+            
           </div>
         </div>
         <div className="payment-method">
@@ -244,8 +269,11 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
                 label="paymentMethod"
                 sx={{ minWidth: 400 }}
                 onChange={(e) => {
+                  setErrors({paymentMethod:''})
                   setPaymentMethod(e.target.value);
+                  
                 }}
+                error={Boolean(errors.paymentMethod)}
               >
                 <MenuItem value={"Cash"}>Cash</MenuItem>
                 <MenuItem value={"Check"}>Check</MenuItem>
@@ -255,11 +283,11 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
               </Select>
             </FormControl>
           </Box>
-          <p className="error-msg">{errors.paymentMethod}</p>
+          
         </div>
         <div className="btn">
           <Button
-            onClick={handleError}
+            onClick={handleSubmit}
             variant="contained"
             color="error"
             className="confirm-btn"
@@ -270,11 +298,22 @@ const TourForm:FC<Props> = ({ tourId, tourDetails }) => {
       </div>
       <div className="split main-img">
         <img
-          src="https://media.cntraveler.com/photos/5a737898b528a60bf010815f/16:9/w_2560,c_limit/Perez-Art-Museum__2018_Pe%CC%81rez-Art-Museum-Miami,-east-facade.-Photo-by-Daniel-Azoulay-Photography.jpg"
+          src= {tourImage ? tourImage : tour.images[0]}
           alt="pic"
         />
       </div>
     </div>
+    <ToastContainer
+        position="top-center"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   )
 }
