@@ -31,7 +31,7 @@ const TourForm:FC = () => {
   const [errors, setErrors] = useState<Errors>({});
   const location = useLocation();
   const state: any = location.state;
-  const {tourDetails, tourImage,bookedTour, tour} = state ? state : [null, null,null]
+  const {tourDetails, tourImage,bookedTour, tour} = state ? state : {tourDetails: null,tourImage: null, bookedTour: null, tour: null}
 
   const errorHandling = useCallback(() =>{
     const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;

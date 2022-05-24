@@ -20,7 +20,7 @@ const Tours:FC = () => {
     const location = useLocation();
     const state:any = location.state;
     const [filter, setFilter] = useState<string>("");
-    const {city, price, tourDate} = state ? state : [null,null,null];
+    const {city, price, tourDate} = state ? state : {city:null,price:null,tourDate:null};
     const filterRef = React.useRef<HTMLSelectElement>(null);
     
     const fetchWeatherResult = useCallback(async () => {
