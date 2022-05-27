@@ -12,7 +12,7 @@ export const fetchWeather = async (city:string) => {
       return response.data;
     })
     .catch((error) => {
-      console.log(error);
+      return error.name
     });
   return res;
 };

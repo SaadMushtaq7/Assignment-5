@@ -31,9 +31,9 @@ const TourForm:FC = () => {
   const [errors, setErrors] = useState<Errors>({});
   const location = useLocation();
   const state: any = location.state;
-  const {tourDetails, tourImage,bookedTour, tour} = state ? state : {tourDetails: null,tourImage: null, bookedTour: null, tour: null}
+  const {tourDetails=null, tourImage=null,bookedTour=null, tour=null} = state;
 
-  const errorHandling = useCallback(() =>{
+  const errorCheck = useCallback(() =>{
     const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     const numReg = /^\d+$/; 
     if(name.length<1){
@@ -74,7 +74,7 @@ const TourForm:FC = () => {
   },[email,name.length,numOfAdults, numOfChilds, paymentMethod.length, phoneNumber])
 
   const handleSubmit = useCallback(async () => {
-    if(!errorHandling()){
+    if(!errorCheck()){
       if (!tour) {
         await updateMyTour(
           name,
@@ -120,7 +120,7 @@ const TourForm:FC = () => {
     paymentMethod,
     tour,
     tourDetails,
-    errorHandling
+    errorCheck
   ]);
 
   useEffect(() => {

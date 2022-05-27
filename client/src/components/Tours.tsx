@@ -20,14 +20,17 @@ const Tours:FC = () => {
     const location = useLocation();
     const state:any = location.state;
     const [filter, setFilter] = useState<string>("");
-    const {city, price, tourDate} = state ? state : {city:null,price:null,tourDate:null};
+    const {city=null, price=null, tourDate=null} = state;
     const filterRef = React.useRef<HTMLSelectElement>(null);
     
     const fetchWeatherResult = useCallback(async () => {
       const res = await fetchWeather(
         state ? city : "Miami"
       );
-      dispatch(setWeather(res));
+      if(res!=='AxiosError'){
+        dispatch(setWeather(res));
+      }
+      
     }, [dispatch, city, state]);
   
     const fetchToursResult = useCallback(async () => {
@@ -44,14 +47,14 @@ const Tours:FC = () => {
         ? state.allweatherupdates.weather.list.slice(0, 3)
         : []
     );
-
+  
     useEffect(() => {
       fetchToursResult();
       if (state) {
           setFilter("city");
       }
     }, [fetchToursResult, state]);
-  
+  console.log(state)
   return (
     <div className="tours-container">
       <div className="upper-display">
@@ -82,7 +85,7 @@ const Tours:FC = () => {
                     <MenuItem className="filter-option" value="price">
                       Price
                     </MenuItem>
-                    <MenuItem className="filter-option" value="date">
+                    <MenuItem className="filter-option" value="tourDate">
                       Date
                     </MenuItem>
                   </Select>
@@ -104,37 +107,31 @@ const Tours:FC = () => {
                       .filter((tour:TourSchema) => {
                         if (!filter) {
                           return tour;
-                        } else {
-                          if (filter === "city") {
-                            if (
-                              tour.city.toLowerCase() ===
-                              city.toLowerCase()
-                            ) {
-                              return tour;
-                            } else if (city.length === 0) {
-                              return tour;
-                            }
-                          } else if (filter === "price") {
-                            const [startPrice, endPrice] =
+                        }
+                        else if(filter === "city"){
+                          if (
+                            tour.city.toLowerCase() ===
+                            city.toLowerCase()
+                          ) {
+                            return tour;
+                          }
+                        }
+                        else if(filter === "price") {
+                          const [startPrice, endPrice] =
                               price.split("-");
-        
                             if (
                               parseInt(tour.price) >= parseInt(startPrice) &&
                               parseInt(tour.price) <= parseInt(endPrice)
                             ) {
                               return tour;
-                            } else if (price.length === 0) {
-                              return tour;
                             }
-                          } else if (filter === "date") {
-                            if(tourDate){
-                              return tour;
-                            }
-                            
-                          }
-        
-                          return null;
                         }
+                        else if(filter === "tourDate") {
+                            if (tourDate) {
+                              return tour;
+                            }
+                        }
+                        return tour;
                       })
                       .map((tour:TourSchema) => (
                         <Grid item xs={2} sm={4} md={4} key={tour._id}>
